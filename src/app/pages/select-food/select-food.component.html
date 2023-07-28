@@ -1,1 +1,15 @@
-<p>select-food works!</p>
+<div class="px-4 py-8">
+    <h1 class="text-xl font-bold">
+        بیا {{gender$ | async | gender}}!
+    </h1>
+
+    <p class="mt-8">به ترتیب امکانپذیری</p>
+
+    <ul class="flex flex-col gap-4">
+        <li
+            *ngFor="let food of suggestedFoods$ | async"
+        >
+        {{ food.label}} - {{food.resemblance * 100}}%
+    </li>
+    </ul>
+</div>

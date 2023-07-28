@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AppService } from 'src/app/core/services/app.service';
 
 @Component({
   selector: 'app-select-food',
@@ -7,5 +8,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectFoodComponent {
+
+  private _appService = inject(AppService);
+
+  gender$ = this._appService.gender$;
+  suggestedFoods$ = this._appService.suggestedFoods$;
 
 }

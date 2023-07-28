@@ -5,6 +5,7 @@ import { IngredientCategory } from "../models/ingredient-categories";
 import { Ingredient } from "../models/ingredient";
 import { Food } from "../models/food";
 import { foods } from "../mock-data";
+import { SuggestedFood } from "../models/suggested-food";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,9 @@ export class AppService {
 
   private _foods$ = new BehaviorSubject<Food[]>([])
   foods$ = this._foods$.asObservable();
+
+  private _suggesetedFoods$ = new BehaviorSubject<SuggestedFood[]>([])
+  suggestedFoods$ = this._suggesetedFoods$.asObservable();
 
   constructor() {
     this._foods$.next(foods)
@@ -181,7 +185,15 @@ export class AppService {
       foodsResemblance.set(food,score/food.ingredients.length)
     })
 
-    console.log(foodsResemblance)
+    const suggestedFoods = Array.from(foodsResemblance.entries()).map(([food, score]) => {
+      return {
+        ...food,
+        resemblance: score
+      } as SuggestedFood
+    }).sort((a,b) => {
+      return b.resemblance - a.resemblance
+    })
 
+    this._suggesetedFoods$.next(suggestedFoods)
   }
 }
