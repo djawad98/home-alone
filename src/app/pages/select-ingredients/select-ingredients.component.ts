@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Ingredient } from 'src/app/core/models/ingredient';
 import { IngredientCategory } from 'src/app/core/models/ingredient-categories';
 import { AppService } from 'src/app/core/services/app.service';
 
@@ -18,5 +19,9 @@ export class SelectIngredientsComponent {
 
   selectCategory(category: IngredientCategory){
     this._appService.selectCategory(category)
+  }
+
+  selectIngredient(ingred: Ingredient){
+    this._appService.selectIngredient(ingred)
   }
 }

@@ -21,8 +21,8 @@
 
             <nz-tabset [nzSelectedIndex]="vm.currentCategory?.id">
                 <nz-tab *ngFor="let category of vm.categories">
-                    <ul>
-                        <li *ngFor="let ingred of ingredients$ | async">{{ingred.label}}</li>
+                    <ul class="flex flex-wrap gap-2">
+                        <li *ngFor="let ingred of ingredients$ | async" (click)="selectIngredient(ingred)" class="bg-white rounded border-solid border border-gray-300 w-[90px] aspect-[1] leading-[90px] text-center select-none" [ngClass]="{'!border-primary text-primary':ingred.isSelected}">{{ingred.label}}</li>
                     </ul>
                 </nz-tab>
             </nz-tabset>

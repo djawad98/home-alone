@@ -1,4 +1,6 @@
 export interface Ingredient {
+    id: number;
     label: string;
-    category: number
+    category: number;
+    isSelected: boolean;
 }

@@ -21,9 +21,11 @@ export class AppService {
   private _ingredients$ = new BehaviorSubject<Ingredient[] | null>(null);
   ingredients$ = this._ingredients$.asObservable();
 
-  private _filteredIngredients$ = new BehaviorSubject<Ingredient[] | null>(null)
+  private _filteredIngredients$ = new BehaviorSubject<Ingredient[]>([])
   filteredIngredients$ = this._filteredIngredients$.asObservable()
 
+  private _selectedIngredients$ = new BehaviorSubject<Ingredient[]>([])
+  selectedIngredients$ = this._selectedIngredients$.asObservable();
 
   constructor() {
     this._ingredientCategories$.next([
@@ -43,24 +45,46 @@ export class AppService {
 
     this._ingredients$.next([
       {
+        id: 0,
         label: 'شوید',
-        category: 0
+        category: 0,
+        isSelected: false
       },
       {
+        id: 1,
         label: 'گشنیز',
-        category: 0
+        category: 0,
+        isSelected: false
       },
       {
+        id: 2,
+        label: 'جعفری',
+        category: 0,
+        isSelected: false
+      },
+      {
+        id: 3,
+        label: 'پیازچه',
+        category: 0,
+        isSelected: false
+      },
+      {
+        id: 4,
         label: 'مرغ',
-        category: 2
+        category: 2,
+        isSelected: false
       },
       {
+        id: 5,
         label: 'شیر',
-        category: 1
+        category: 1,
+        isSelected: false
       },
       {
+        id: 6,
         label: 'کالباس',
-        category: 2
+        category: 2,
+        isSelected: false
       },
     ])
 
@@ -70,6 +94,20 @@ export class AppService {
       if(currentCategory){
         this._filteredIngredients$.next(this.getCategoryIngredients(currentCategory))
       }
+    })
+
+    this._selectedIngredients$.subscribe(selectedIngredients => {
+      const filterdIngredients = this._filteredIngredients$.getValue();
+      const selectedIngredientsId = selectedIngredients.map(ingred => ingred.id)
+      filterdIngredients.map(ingred => {
+        if(selectedIngredientsId.includes(ingred.id)){
+          ingred.isSelected = true;
+        } else {
+          ingred.isSelected = false;
+        }
+
+        return ingred;
+      })
     })
   }
 
@@ -90,5 +128,17 @@ export class AppService {
 
   selectCategory(category: IngredientCategory){
     this._currentCategory$.next(category)
+  }
+
+  selectIngredient(ingred: Ingredient){
+    const selectedIngredients = this._selectedIngredients$.getValue();
+    const selectedIngredientsId = selectedIngredients.map(ingred => ingred.id);
+    if(selectedIngredientsId.includes(ingred.id)){
+      const deleteIndex = selectedIngredientsId.indexOf(ingred.id)
+      selectedIngredients.splice(deleteIndex,1)
+    } else {
+      selectedIngredients.push(ingred);
+    }
+    this._selectedIngredients$.next(selectedIngredients)
   }
 }
