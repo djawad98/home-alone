@@ -3,6 +3,8 @@ import { Gender } from "../models/gender";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { IngredientCategory } from "../models/ingredient-categories";
 import { Ingredient } from "../models/ingredient";
+import { Food } from "../models/food";
+import { foods } from "../mock-data";
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,11 @@ export class AppService {
   private _selectedIngredients$ = new BehaviorSubject<Ingredient[]>([])
   selectedIngredients$ = this._selectedIngredients$.asObservable();
 
+  private _foods$ = new BehaviorSubject<Food[]>([])
+  foods$ = this._foods$.asObservable();
+
   constructor() {
+    this._foods$.next(foods)
     this._ingredientCategories$.next([
       {
         label: 'سبزیجات',
@@ -42,6 +48,11 @@ export class AppService {
       {
         label: 'گوشت',
         id:2,
+        selectedCount: 0
+      },
+      {
+        label: 'غلات',
+        id:3,
         selectedCount: 0
       },
     ])
@@ -87,6 +98,12 @@ export class AppService {
         id: 6,
         label: 'کالباس',
         category: 2,
+        isSelected: false
+      },
+      {
+        id: 7,
+        label: 'برنج',
+        category: 3,
         isSelected: false
       },
     ])
@@ -149,5 +166,22 @@ export class AppService {
       selectedIngredients.push(ingred);
     }
     this._selectedIngredients$.next(selectedIngredients)
+  }
+
+  getRecipes(){
+    const selectedIngredsId = this._selectedIngredients$.getValue().map(ingred => ingred.id);
+    const foodsResemblance = new Map<Food, number>();
+    this._foods$.getValue().forEach((food) => {
+      let score = 0;
+      food.ingredients.forEach(ingred => {
+        if(selectedIngredsId.includes(ingred)){
+          foodsResemblance.set(food,++score)
+        }
+      })
+      foodsResemblance.set(food,score/food.ingredients.length)
+    })
+
+    console.log(foodsResemblance)
+
   }
 }

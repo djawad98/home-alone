@@ -25,4 +25,8 @@ export class SelectIngredientsComponent {
   selectIngredient(ingred: Ingredient){
     this._appService.selectIngredient(ingred)
   }
+
+  getRecipes(){
+    this._appService.getRecipes();
+  }
 }
