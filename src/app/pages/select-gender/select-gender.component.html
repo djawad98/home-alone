@@ -4,7 +4,7 @@
     <p>سلام!</p>
     <p>جنسیت تون چیه؟</p>
     <div class="mt-4">
-        <button nz-button nzType="default" nzSize="large" class="w-[120px] mx-2">حاجی&nbsp; 🙋‍♂️</button>
-        <button nz-button nzType="default" nzSize="large" class="w-[120px] mx-2">آبجی&nbsp; 🙋‍♀️</button>
+        <button (click)="setGender(Gender.Male)" nz-button nzType="default" nzSize="large" class="w-[120px] mx-2">حاجی&nbsp; 🙋‍♂️</button>
+        <button (click)="setGender(Gender.Female)" nz-button nzType="default" nzSize="large" class="w-[120px] mx-2">آبجی&nbsp; 🙋‍♀️</button>
     </div>
 </div>
