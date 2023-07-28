@@ -4,11 +4,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {NzButtonModule} from 'ng-zorro-antd/button';
+import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import { SelectGenderComponent } from './pages/select-gender/select-gender.component';
 import { SelectIngredientsComponent } from './pages/select-ingredients/select-ingredients.component';
 import { SelectFoodComponent } from './pages/select-food/select-food.component';
 import { RecipeComponent } from './pages/recipe/recipe.component'
 import { GenderPipe } from './core/pipes/gender.pipe';
+
+const AntDesign = [
+  NzButtonModule,
+  NzTabsModule
+]
 
 @NgModule({
   declarations: [
@@ -22,7 +28,7 @@ import { GenderPipe } from './core/pipes/gender.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NzButtonModule
+    ...AntDesign,
   ],
   providers: [],
   bootstrap: [AppComponent]
