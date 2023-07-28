@@ -5,21 +5,27 @@
 
     <p class="mt-8">چی داری الان؟</p>
 
-    <div class="mt-4">
-        <ul class="flex gap-2">
-            <li *ngFor="let cat of categories$ | async; let i = index;">
-                <button (click)="selectCategory(cat)" nz-button [nzType]="(currentCategory$ | async)?.id === i ? 'primary': 'default'">
-                    {{cat.label}}
-                </button>
-            </li>
-        </ul>
+    <ng-container *ngIf="{
+        categories: categories$ | async,
+        currentCategory: currentCategory$ | async
+    } as vm">
+        <div class="mt-4">
+            <ul class="flex gap-2">
+                <li *ngFor="let cat of vm.categories; let i = index;">
+                    <button (click)="selectCategory(cat)" nz-button
+                        [nzType]="vm.currentCategory?.id === i ? 'primary': 'default'">
+                        {{cat.label}}
+                    </button>
+                </li>
+            </ul>
 
-        <nz-tabset [nzSelectedIndex]="(currentCategory$ | async)?.id">
-            <nz-tab *ngFor="let category of categories$ | async">
-                <ul>
-                    <li *ngFor="let ingred of ingredients$ | async">{{ingred.label}}</li>
-                </ul>
-            </nz-tab>
-        </nz-tabset>
-    </div>
+            <nz-tabset [nzSelectedIndex]="vm.currentCategory?.id">
+                <nz-tab *ngFor="let category of vm.categories">
+                    <ul>
+                        <li *ngFor="let ingred of ingredients$ | async">{{ingred.label}}</li>
+                    </ul>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </ng-container>
 </div>
