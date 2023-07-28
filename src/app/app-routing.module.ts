@@ -5,11 +5,16 @@ import { SelectIngredientsComponent } from './pages/select-ingredients/select-in
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'gender',
+    pathMatch:  'full'
+  },
+  {
     path: 'gender',
     component: SelectGenderComponent
   },
   {
-    path: 'select-ingred',
+    path: 'ingredients',
     component: SelectIngredientsComponent
   }
 ];

@@ -18,7 +18,7 @@ export class SelectGenderComponent {
 
   setGender(gender: Gender) {
     this._appService.setGender(gender);
-    this._router.navigate(['/select-ingred'])
+    this._router.navigate(['/ingredients'])
   }
 
 }
