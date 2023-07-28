@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Gender } from 'src/app/core/models/gender';
 import { AppService } from 'src/app/core/services/app.service';
 
@@ -11,10 +12,13 @@ import { AppService } from 'src/app/core/services/app.service';
 export class SelectGenderComponent {
 
   private _appService = inject(AppService);
+  private _router = inject(Router);
+
   readonly Gender = Gender;
 
   setGender(gender: Gender) {
-    this._appService.setGender(gender)
+    this._appService.setGender(gender);
+    this._router.navigate(['/select-ingred'])
   }
 
 }

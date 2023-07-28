@@ -8,6 +8,7 @@ import { SelectGenderComponent } from './pages/select-gender/select-gender.compo
 import { SelectIngredientsComponent } from './pages/select-ingredients/select-ingredients.component';
 import { SelectFoodComponent } from './pages/select-food/select-food.component';
 import { RecipeComponent } from './pages/recipe/recipe.component'
+import { GenderPipe } from './core/pipes/gender.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { RecipeComponent } from './pages/recipe/recipe.component'
     SelectGenderComponent,
     SelectIngredientsComponent,
     SelectFoodComponent,
-    RecipeComponent
+    RecipeComponent,
+    GenderPipe
   ],
   imports: [
     BrowserModule,

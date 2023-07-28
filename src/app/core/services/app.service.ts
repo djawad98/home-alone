@@ -8,6 +8,8 @@ import { BehaviorSubject } from "rxjs";
 export class AppService {
 
     private _gender$ = new BehaviorSubject<Gender | null>(null);
+    gender$ = this._gender$.asObservable();
+
     setGender(gender: Gender){
         this._gender$.next(gender)
     }
