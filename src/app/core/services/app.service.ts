@@ -31,15 +31,18 @@ export class AppService {
     this._ingredientCategories$.next([
       {
         label: 'سبزیجات',
-        id:0
+        id:0,
+        selectedCount: 0
       },
       {
         label: 'لبنیات',
-        id:1
+        id:1,
+        selectedCount: 0
       },
       {
         label: 'گوشت',
-        id:2
+        id:2,
+        selectedCount: 0
       },
     ])
 
@@ -107,6 +110,12 @@ export class AppService {
         }
 
         return ingred;
+      })
+
+      const categories = this._ingredientCategories$.getValue();
+      categories?.map(cat => {
+        cat.selectedCount = selectedIngredients.filter(ingred => ingred.category === cat.id).length
+        return cat;
       })
     })
   }

@@ -1,4 +1,5 @@
 export interface IngredientCategory {
     label: string;
-    id: number
+    id: number;
+    selectedCount: number;
 }
