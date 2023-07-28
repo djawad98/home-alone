@@ -22,7 +22,11 @@ const routes: Routes = [
   {
     path: 'recipes',
     component: SelectFoodComponent
-  }
+  },
+  {
+    path: '**',
+    redirectTo: 'gender'
+  },
 ];
 
 @NgModule({
