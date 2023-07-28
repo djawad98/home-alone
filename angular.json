@@ -33,7 +33,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/app/antd.less",
+              "src/app/styles/antd.less",
               "node_modules/tailwindcss/tailwind.css",
               "src/styles.scss"
             ],
