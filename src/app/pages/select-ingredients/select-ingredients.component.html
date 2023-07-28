@@ -15,7 +15,9 @@
                     <button (click)="selectCategory(cat)" nz-button
                         [nzType]="vm.currentCategory?.id === i ? 'primary': 'default'">
                         {{cat.label}}
-                        <span *ngIf="cat.selectedCount > 0" class="rounded-full bg-primary inline-block text-white text-xs px-1 h-[15px] leading-[17px] ms-2">{{ cat.selectedCount }}</span>
+                        <span *ngIf="cat.selectedCount > 0"
+                            class="rounded-full bg-primary inline-block text-white text-xs px-1 h-[15px] leading-[17px] ms-2">{{
+                            cat.selectedCount }}</span>
                     </button>
                 </li>
             </ul>
@@ -23,10 +25,28 @@
             <nz-tabset [nzSelectedIndex]="vm.currentCategory?.id">
                 <nz-tab *ngFor="let category of vm.categories">
                     <ul class="flex flex-wrap gap-2">
-                        <li *ngFor="let ingred of ingredients$ | async" (click)="selectIngredient(ingred)" class="bg-white rounded border-solid border border-gray-300 w-[90px] aspect-[1] leading-[90px] text-center select-none" [ngClass]="{'!border-primary text-primary':ingred.isSelected}">{{ingred.label}}</li>
+                        <li *ngFor="let ingred of ingredients$ | async" (click)="selectIngredient(ingred)"
+                            class="bg-white rounded border-solid border border-gray-300 w-[90px] aspect-[1] leading-[90px] text-center select-none"
+                            [ngClass]="{'!border-primary text-primary':ingred.isSelected}">{{ingred.label}}</li>
                     </ul>
                 </nz-tab>
             </nz-tabset>
         </div>
     </ng-container>
 </div>
+
+<ng-container *ngIf="selectedIngredients$ | async as selectedIngredients">
+    <div *ngIf="selectedIngredients.length" class="fixed bottom-0 inset-x-0 bg-white rounded-tr rounded-tl px-2 py-4">
+        <button class="mx-auto block mb-4">
+            <span nz-icon nzType="up" nzTheme="outline"></span>
+        </button>
+        <div class="flex justify-between items-center">
+            <p>موارد انتخاب شده</p>
+        <ul class="flex gap-2">
+            <li *ngFor="let ingred of selectedIngredients.slice(-4)" class="bg-gray-200 rounded-full px-2 py-1">
+                {{ingred.label}}
+            </li>
+        </ul>
+    </div>
+    </div>
+</ng-container>

@@ -12,11 +12,13 @@ import { SelectIngredientsComponent } from './pages/select-ingredients/select-in
 import { SelectFoodComponent } from './pages/select-food/select-food.component';
 import { RecipeComponent } from './pages/recipe/recipe.component'
 import { GenderPipe } from './core/pipes/gender.pipe';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 const AntDesign = [
   NzButtonModule,
   NzTabsModule,
-  NzBadgeModule
+  NzBadgeModule,
+  NzIconModule
 ]
 
 @NgModule({

@@ -16,6 +16,7 @@ export class SelectIngredientsComponent {
   gender$ = this._appService.gender$;
   categories$ = this._appService.ingredientCategories$;
   ingredients$ = this._appService.filteredIngredients$;
+  selectedIngredients$ = this._appService.selectedIngredients$;
 
   selectCategory(category: IngredientCategory){
     this._appService.selectCategory(category)
