@@ -1,5 +1,5 @@
 .router-outlet {
-    @apply  w-[430px] mx-auto h-screen;
+    @apply  w-[430px] max-w-full mx-auto h-screen;
     background-color: #F2F2F2;
     font-family: Vazirmatn RD;
 }
