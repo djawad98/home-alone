@@ -36,17 +36,19 @@
 </div>
 
 <ng-container *ngIf="selectedIngredients$ | async as selectedIngredients">
-    <div *ngIf="selectedIngredients.length" class="fixed bottom-0 inset-x-0 bg-white rounded-tr rounded-tl px-2 py-4">
+    <div *ngIf="selectedIngredients.length"
+        class="fixed bottom-0 inset-x-0 bg-white rounded-tr-2xl rounded-tl-2xl px-4 py-4 shadow-lg">
         <button class="mx-auto block mb-4">
             <span nz-icon nzType="up" nzTheme="outline"></span>
         </button>
         <div class="flex justify-between items-center">
             <p>موارد انتخاب شده</p>
-        <ul class="flex gap-2">
-            <li *ngFor="let ingred of selectedIngredients.slice(-4)" class="bg-gray-200 rounded-full px-2 py-1">
-                {{ingred.label}}
-            </li>
-        </ul>
-    </div>
+            <ul class="flex gap-2">
+                <li *ngFor="let ingred of selectedIngredients.slice(-4)" class="bg-gray-200 rounded-full px-2 py-1">
+                    {{ingred.label}}
+                </li>
+            </ul>
+        </div>
+        <button nz-button nzType="primary" nzBlock="true" nzSize="large" class="mt-4">به مال اینا رو به هم!</button>
     </div>
 </ng-container>
