@@ -40,3 +40,5 @@ jobs:
         build_dir: 'dist'
         # Whether to treat build_dir as an absolute path
         # absolute_build_dir: # optional, default is false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
