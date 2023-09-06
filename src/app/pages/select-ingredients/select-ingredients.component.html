@@ -9,29 +9,31 @@
         categories: categories$ | async,
         currentCategory: currentCategory$ | async
     } as vm">
-        <div class="mt-4">
-            <ul class="flex gap-2">
-                <li *ngFor="let cat of vm.categories; let i = index;">
-                    <button (click)="selectCategory(cat)" nz-button
-                        [nzType]="vm.currentCategory?.id === i ? 'primary': 'default'">
-                        {{cat.label}}
-                        <span *ngIf="cat.selectedCount > 0"
-                            class="rounded-full bg-primary inline-block text-white text-xs px-1 h-[15px] leading-[17px] ms-2">{{
-                            cat.selectedCount }}</span>
-                    </button>
-                </li>
-            </ul>
+        <ng-container *ngIf="vm.categories && vm.currentCategory">
 
-            <nz-tabset [nzSelectedIndex]="vm.currentCategory?.id">
-                <nz-tab *ngFor="let category of vm.categories">
-                    <ul class="flex flex-wrap gap-2">
-                        <li *ngFor="let ingred of ingredients$ | async" (click)="selectIngredient(ingred)"
-                            class="bg-white rounded border-solid border border-gray-300 w-[90px] aspect-[1] leading-[90px] text-center select-none"
-                            [ngClass]="{'!border-primary text-primary':ingred.isSelected}">{{ingred.label}}</li>
-                    </ul>
-                </nz-tab>
-            </nz-tabset>
-        </div>
+            <div class="mt-4">
+                <ul class="flex gap-2">
+                    <li *ngFor="let cat of vm.categories; let i = index;">
+                        <button (click)="selectCategory(cat)" nz-button [nzType]="cat.isActive ? 'primary': 'default'">
+                            {{cat.label}}
+                            <span *ngIf="cat.selectedCount > 0"
+                                class="rounded-full bg-primary inline-block text-white text-xs px-1 h-[15px] leading-[17px] ms-2">{{
+                                cat.selectedCount }}</span>
+                        </button>
+                    </li>
+                </ul>
+
+                <nz-tabset [nzSelectedIndex]="vm.currentCategory.id">
+                    <nz-tab *ngFor="let category of vm.categories">
+                        <ul class="flex flex-wrap gap-2">
+                            <li *ngFor="let ingred of ingredients$ | async" (click)="selectIngredient(ingred)"
+                                class="bg-white rounded border-solid border border-gray-300 w-[90px] aspect-[1] leading-[90px] text-center select-none"
+                                [ngClass]="{'!border-primary text-primary':ingred.isSelected}">{{ingred.label}}</li>
+                        </ul>
+                    </nz-tab>
+                </nz-tabset>
+            </div>
+        </ng-container>
     </ng-container>
 </div>
 
@@ -44,11 +46,12 @@
         <div class="flex justify-between items-center">
             <p>موارد انتخاب شده</p>
             <ul class="flex gap-2">
-                <li *ngFor="let ingred of selectedIngredients.slice(-4)" class="bg-gray-200 rounded-full px-2 py-1">
+                <li *ngFor="let ingred of selectedIngredients" class="bg-gray-200 rounded-full px-2 py-1">
                     {{ingred.label}}
                 </li>
             </ul>
         </div>
-        <button (click)="getRecipes()" nz-button nzType="primary" nzBlock="true" nzSize="large" class="mt-4">تمام</button>
+        <button (click)="getRecipes()" nz-button nzType="primary" nzBlock="true" nzSize="large"
+            class="mt-4">تمام</button>
     </div>
 </ng-container>

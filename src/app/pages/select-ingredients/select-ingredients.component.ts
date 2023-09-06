@@ -14,22 +14,26 @@ export class SelectIngredientsComponent {
 
   private _appService = inject(AppService);
   private _router = inject(Router);
-  currentCategory$ = this._appService.currentCategory$;
+  currentCategory$ = this._appService.selectedIngredCategory$;
   gender$ = this._appService.gender$;
   categories$ = this._appService.ingredientCategories$;
-  ingredients$ = this._appService.filteredIngredients$;
-  selectedIngredients$ = this._appService.selectedIngredients$;
+  ingredients$ = this._appService.filteredIngreds$;
+  selectedIngredients$ = this._appService.selectedIngreds$;
+
+  constructor(){
+    this.currentCategory$.subscribe(console.log)
+  }
 
   selectCategory(category: IngredientCategory){
-    this._appService.selectCategory(category)
+    this._appService.actionSelectCategory(category)
   }
 
   selectIngredient(ingred: Ingredient){
-    this._appService.selectIngredient(ingred)
+    this._appService.actionSelectIngredient(ingred)
   }
 
   getRecipes(){
     this._router.navigate(['recipes'])
-    this._appService.getRecipes();
+    this._appService.actionGetRecipes();
   }
 }

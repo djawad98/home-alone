@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Gender } from "../models/gender";
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, combineLatestWith, map, of, take, tap } from "rxjs";
 import { IngredientCategory } from "../models/ingredient-categories";
 import { Ingredient } from "../models/ingredient";
 import { Food } from "../models/food";
@@ -15,52 +15,97 @@ export class AppService {
   private _gender$ = new BehaviorSubject<Gender | null>(null);
   gender$ = this._gender$.asObservable();
 
-  private _ingredientCategories$ = new BehaviorSubject<IngredientCategory[] | null>(null);
-  ingredientCategories$ = this._ingredientCategories$.asObservable();
+  private _ingredientCategories$ = new BehaviorSubject<IngredientCategory[]>([]);
+  get ingredientCategories$() {
+    if (!this._ingredientCategories$.getValue().length) {
+      this.actionSetIngredientCategories()
+    }
+    return this._ingredientCategories$.asObservable();
+  }
 
-  private _currentCategory$ = new BehaviorSubject<IngredientCategory | null>(null);
-  currentCategory$ = this._currentCategory$.asObservable();
 
-  private _ingredients$ = new BehaviorSubject<Ingredient[] | null>(null);
-  ingredients$ = this._ingredients$.asObservable();
-
-  private _filteredIngredients$ = new BehaviorSubject<Ingredient[]>([])
-  filteredIngredients$ = this._filteredIngredients$.asObservable()
-
-  private _selectedIngredients$ = new BehaviorSubject<Ingredient[]>([])
-  selectedIngredients$ = this._selectedIngredients$.asObservable();
+  private _ingredients$ = new BehaviorSubject<Ingredient[]>([]);
+  get ingredients$() {
+    if (!this._ingredients$.getValue().length) {
+      this.actionSetIngredients();
+    }
+    return this._ingredients$.asObservable()
+  }
 
   private _foods$ = new BehaviorSubject<Food[]>([])
-  foods$ = this._foods$.asObservable();
+  get foods$() {
+    if (!this._foods$.getValue().length) {
+      this.actionSetFoods();
+    }
+    return this._foods$.asObservable()
+  }
+
+  get foodsMap$() {
+    return this.foods$.pipe(
+      map(foods => {
+        return new Map<number, Food>(foods.entries())
+      })
+    )
+  }
 
   private _suggesetedFoods$ = new BehaviorSubject<SuggestedFood[]>([])
   suggestedFoods$ = this._suggesetedFoods$.asObservable();
 
-  constructor() {
-    this._foods$.next(foods)
-    this._ingredientCategories$.next([
-      {
-        label: 'سبزیجات',
-        id:0,
-        selectedCount: 0
-      },
-      {
-        label: 'لبنیات',
-        id:1,
-        selectedCount: 0
-      },
-      {
-        label: 'گوشت',
-        id:2,
-        selectedCount: 0
-      },
-      {
-        label: 'غلات',
-        id:3,
-        selectedCount: 0
-      },
-    ])
+  get selectedIngredCategory$() {
+    return this.ingredientCategories$.pipe(map((cats => {
 
+      let found = cats.find(cat => cat.isActive);
+
+      // if there's no active cat then use the first one as fallback
+      if (!found) {
+        found = cats[0];
+        this._ingredientCategories$.next(
+          cats.map((cat, i) => {
+            if (i === 0) { cat.isActive = true; }
+            return cat
+          })
+        )
+      }
+      return found
+    })))
+  }
+
+  get filteredIngreds$(){
+    return this.ingredients$.pipe(
+      combineLatestWith(this.selectedIngredCategory$),
+      map(([ingreds, currentCat]) => {
+        return ingreds.filter(ingred => {
+          return ingred.category === currentCat.id;
+        })
+      })
+    )
+  }
+
+  get selectedIngreds$(){
+    return this.ingredients$.pipe(map(ingreds => {
+      return ingreds.filter(ingred => ingred.isSelected)
+    }))
+  }
+
+
+  private actionUpdateSelectedCountInCategory() {
+    this.selectedIngreds$.pipe(
+      combineLatestWith(this.ingredientCategories$),
+      take(1),
+      tap(([selectedIngreds, ingredCategories]) => {
+        this._ingredientCategories$.next(
+          ingredCategories.map(cat => {
+            cat.selectedCount = selectedIngreds.filter(ingred => ingred.category === cat.id).length
+            return cat;
+          })
+        )
+      })
+    ).subscribe()
+  }
+
+
+
+  private actionSetIngredients() {
     this._ingredients$.next([
       {
         id: 0,
@@ -110,90 +155,108 @@ export class AppService {
         category: 3,
         isSelected: false
       },
-    ])
-
-    this._currentCategory$.next(this._ingredientCategories$.getValue()![0])
-
-    this._currentCategory$.subscribe(currentCategory => {
-      if(currentCategory){
-        this._filteredIngredients$.next(this.getCategoryIngredients(currentCategory))
-      }
-    })
-
-    this._selectedIngredients$.subscribe(selectedIngredients => {
-      const filterdIngredients = this._filteredIngredients$.getValue();
-      const selectedIngredientsId = selectedIngredients.map(ingred => ingred.id)
-      filterdIngredients.map(ingred => {
-        if(selectedIngredientsId.includes(ingred.id)){
-          ingred.isSelected = true;
-        } else {
-          ingred.isSelected = false;
-        }
-
-        return ingred;
-      })
-
-      const categories = this._ingredientCategories$.getValue();
-      categories?.map(cat => {
-        cat.selectedCount = selectedIngredients.filter(ingred => ingred.category === cat.id).length
-        return cat;
-      })
-    })
+    ]);
   }
 
-  setGender(gender: Gender) {
+
+  private actionSetIngredientCategories() {
+    this._ingredientCategories$.next([
+      {
+        label: 'سبزیجات',
+        id: 0,
+        selectedCount: 0,
+        isActive: false
+      },
+      {
+        label: 'لبنیات',
+        id: 1,
+        selectedCount: 0,
+        isActive: false
+      },
+      {
+        label: 'گوشت',
+        id: 2,
+        selectedCount: 0,
+        isActive: false
+      },
+      {
+        label: 'غلات',
+        id: 3,
+        selectedCount: 0,
+        isActive: false
+      },
+    ]);
+  }
+
+  private actionSetFoods() {
+    this._foods$.next(foods);
+  }
+
+  actionSetGender(gender: Gender) {
     this._gender$.next(gender)
   }
 
-  getCategoryIngredients(category: IngredientCategory): Ingredient[] {
-    const allIngreds = this._ingredients$.getValue();
-    if (!allIngreds) return []
 
-    const filtered = allIngreds.filter(ingred => {
-      return ingred.category === category.id
-    })
+  actionSelectIngredient(selectedIngred: Ingredient) {
+    this.ingredients$.pipe(
+      take(1),
+      tap(ingreds => {
+        this._ingredients$.next(ingreds.map(ingred => {
+          if(ingred.id === selectedIngred.id){
+            ingred.isSelected = !ingred.isSelected
+          }
+          return ingred
+        }))
 
-    return filtered
-  }
-
-  selectCategory(category: IngredientCategory){
-    this._currentCategory$.next(category)
-  }
-
-  selectIngredient(ingred: Ingredient){
-    const selectedIngredients = this._selectedIngredients$.getValue();
-    const selectedIngredientsId = selectedIngredients.map(ingred => ingred.id);
-    if(selectedIngredientsId.includes(ingred.id)){
-      const deleteIndex = selectedIngredientsId.indexOf(ingred.id)
-      selectedIngredients.splice(deleteIndex,1)
-    } else {
-      selectedIngredients.push(ingred);
-    }
-    this._selectedIngredients$.next(selectedIngredients)
-  }
-
-  getRecipes(){
-    const selectedIngredsId = this._selectedIngredients$.getValue().map(ingred => ingred.id);
-    const foodsResemblance = new Map<Food, number>();
-    this._foods$.getValue().forEach((food) => {
-      let score = 0;
-      food.ingredients.forEach(ingred => {
-        if(selectedIngredsId.includes(ingred)){
-          foodsResemblance.set(food,++score)
-        }
+        this.actionUpdateSelectedCountInCategory()
       })
-      foodsResemblance.set(food,score/food.ingredients.length)
-    })
-
-    const suggestedFoods = Array.from(foodsResemblance.entries()).map(([food, score]) => {
-      return {
-        ...food,
-        resemblance: score
-      } as SuggestedFood
-    }).sort((a,b) => {
-      return b.resemblance - a.resemblance
-    })
-
-    this._suggesetedFoods$.next(suggestedFoods)
+    ).subscribe()
   }
+
+  actionSelectCategory(selectedCategory: IngredientCategory) {
+    this.ingredientCategories$.pipe(
+      take(1),
+      tap(cats => {
+        this._ingredientCategories$.next(
+          cats.map(cat => {
+            cat.isActive = false;
+            if (cat.id === selectedCategory.id) {
+              cat.isActive = true;
+            }
+            return cat;
+          })
+        )
+      })
+    ).subscribe()
+  }
+
+
+
+  actionGetRecipes() {
+
+    this.selectedIngreds$.pipe(
+      combineLatestWith(this.foods$),
+      take(1),
+      tap(([selectedIngreds, foods]) => {
+        const selectedIngredsId = selectedIngreds.map(ingred => ingred.id);
+        const suggestedFoods = foods.map(food => {
+          const resemblance = food.ingredients.reduce((result, currIngred) => {
+            if(selectedIngredsId.includes(currIngred)){
+              result++
+            }
+            return result;
+          },0) / food.ingredients.length
+
+
+          return {
+            ...food,
+            resemblance
+          }
+        })
+        suggestedFoods.sort((a,b) => b.resemblance - a.resemblance)
+
+        this._suggesetedFoods$.next(suggestedFoods)
+      })
+    ).subscribe()
+ }
 }

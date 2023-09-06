@@ -17,7 +17,7 @@ export class SelectGenderComponent {
   readonly Gender = Gender;
 
   setGender(gender: Gender) {
-    this._appService.setGender(gender);
+    this._appService.actionSetGender(gender);
     this._router.navigate(['/ingredients'])
   }
 
