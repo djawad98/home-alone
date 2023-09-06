@@ -16,8 +16,8 @@ export class SelectIngredientsComponent {
   private _router = inject(Router);
   currentCategory$ = this._appService.selectedIngredCategory$;
   gender$ = this._appService.gender$;
-  categories$ = this._appService.ingredientCategories$;
-  ingredients$ = this._appService.filteredIngreds$;
+  categories$ = this._appService.ingredCategories$;
+  ingredients$ = this._appService.selectedCategoryIngreds$;
   selectedIngredients$ = this._appService.selectedIngreds$;
 
   constructor(){
@@ -29,7 +29,7 @@ export class SelectIngredientsComponent {
   }
 
   selectIngredient(ingred: Ingredient){
-    this._appService.actionSelectIngredient(ingred)
+    this._appService.actionSelectIngred(ingred)
   }
 
   getRecipes(){

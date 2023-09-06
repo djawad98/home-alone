@@ -15,21 +15,21 @@ export class AppService {
   private _gender$ = new BehaviorSubject<Gender | null>(null);
   gender$ = this._gender$.asObservable();
 
-  private _ingredientCategories$ = new BehaviorSubject<IngredientCategory[]>([]);
-  get ingredientCategories$() {
-    if (!this._ingredientCategories$.getValue().length) {
-      this.actionSetIngredientCategories()
+  private _ingredCategories$ = new BehaviorSubject<IngredientCategory[]>([]);
+  get ingredCategories$() {
+    if (!this._ingredCategories$.getValue().length) {
+      this.actionSetIngredCategories()
     }
-    return this._ingredientCategories$.asObservable();
+    return this._ingredCategories$.asObservable();
   }
 
 
-  private _ingredients$ = new BehaviorSubject<Ingredient[]>([]);
-  get ingredients$() {
-    if (!this._ingredients$.getValue().length) {
-      this.actionSetIngredients();
+  private _ingreds$ = new BehaviorSubject<Ingredient[]>([]);
+  get ingreds$() {
+    if (!this._ingreds$.getValue().length) {
+      this.actionSetIngreds();
     }
-    return this._ingredients$.asObservable()
+    return this._ingreds$.asObservable()
   }
 
   private _foods$ = new BehaviorSubject<Food[]>([])
@@ -52,14 +52,14 @@ export class AppService {
   suggestedFoods$ = this._suggesetedFoods$.asObservable();
 
   get selectedIngredCategory$() {
-    return this.ingredientCategories$.pipe(map((cats => {
+    return this.ingredCategories$.pipe(map((cats => {
 
       let found = cats.find(cat => cat.isActive);
 
       // if there's no active cat then use the first one as fallback
       if (!found) {
         found = cats[0];
-        this._ingredientCategories$.next(
+        this._ingredCategories$.next(
           cats.map((cat, i) => {
             if (i === 0) { cat.isActive = true; }
             return cat
@@ -70,8 +70,8 @@ export class AppService {
     })))
   }
 
-  get filteredIngreds$(){
-    return this.ingredients$.pipe(
+  get selectedCategoryIngreds$(){
+    return this.ingreds$.pipe(
       combineLatestWith(this.selectedIngredCategory$),
       map(([ingreds, currentCat]) => {
         return ingreds.filter(ingred => {
@@ -82,7 +82,7 @@ export class AppService {
   }
 
   get selectedIngreds$(){
-    return this.ingredients$.pipe(map(ingreds => {
+    return this.ingreds$.pipe(map(ingreds => {
       return ingreds.filter(ingred => ingred.isSelected)
     }))
   }
@@ -90,10 +90,10 @@ export class AppService {
 
   private actionUpdateSelectedCountInCategory() {
     this.selectedIngreds$.pipe(
-      combineLatestWith(this.ingredientCategories$),
+      combineLatestWith(this.ingredCategories$),
       take(1),
       tap(([selectedIngreds, ingredCategories]) => {
-        this._ingredientCategories$.next(
+        this._ingredCategories$.next(
           ingredCategories.map(cat => {
             cat.selectedCount = selectedIngreds.filter(ingred => ingred.category === cat.id).length
             return cat;
@@ -105,8 +105,8 @@ export class AppService {
 
 
 
-  private actionSetIngredients() {
-    this._ingredients$.next([
+  private actionSetIngreds() {
+    this._ingreds$.next([
       {
         id: 0,
         label: 'شوید',
@@ -159,8 +159,8 @@ export class AppService {
   }
 
 
-  private actionSetIngredientCategories() {
-    this._ingredientCategories$.next([
+  private actionSetIngredCategories() {
+    this._ingredCategories$.next([
       {
         label: 'سبزیجات',
         id: 0,
@@ -197,11 +197,11 @@ export class AppService {
   }
 
 
-  actionSelectIngredient(selectedIngred: Ingredient) {
-    this.ingredients$.pipe(
+  actionSelectIngred(selectedIngred: Ingredient) {
+    this.ingreds$.pipe(
       take(1),
       tap(ingreds => {
-        this._ingredients$.next(ingreds.map(ingred => {
+        this._ingreds$.next(ingreds.map(ingred => {
           if(ingred.id === selectedIngred.id){
             ingred.isSelected = !ingred.isSelected
           }
@@ -214,10 +214,10 @@ export class AppService {
   }
 
   actionSelectCategory(selectedCategory: IngredientCategory) {
-    this.ingredientCategories$.pipe(
+    this.ingredCategories$.pipe(
       take(1),
       tap(cats => {
-        this._ingredientCategories$.next(
+        this._ingredCategories$.next(
           cats.map(cat => {
             cat.isActive = false;
             if (cat.id === selectedCategory.id) {

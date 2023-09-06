@@ -6,10 +6,6 @@ import { AppService } from './core/services/app.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
   title = 'home-alone';
-  private _appService = inject(AppService)
-
-  ngOnInit(){
-  }
 }
