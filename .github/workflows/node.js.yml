@@ -28,16 +28,12 @@ jobs:
         cache: 'npm'
     - run: npm i -f
     - run: npm run build --if-present
-    - name: GitHub Pages
-      # You may pin to the exact commit or the version.
-      # uses: crazy-max/ghaction-github-pages@5859b4ea7efe6b470a5b19c570460eae9323aefc
-      uses: crazy-max/ghaction-github-pages@v3.2.0
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.2
       with:
-        # Git branch where assets will be deployed
-        target_branch: 'main'
-        # Build directory to deploy
-        build_dir: 'dist'
-        # Whether to treat build_dir as an absolute path
-        # absolute_build_dir: # optional, default is false
-      env:
-        GH_PAT: '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'
+        # A file, directory or wildcard pattern that describes what to upload
+          path: 'dist'
+    - name: Deploy GitHub Pages site
+      uses: actions/deploy-pages@v1.2.9
+      with:
+        artifact_name: 'artifact'
