@@ -40,4 +40,3 @@ jobs:
       uses: actions/deploy-pages@v1.2.9
       with:
         artifact_name: 'artifact'
-        token: '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'
