@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -33,7 +33,6 @@ jobs:
       # uses: crazy-max/ghaction-github-pages@5859b4ea7efe6b470a5b19c570460eae9323aefc
       uses: crazy-max/ghaction-github-pages@v3.2.0
       with:
-        github_token: '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'
         # Git branch where assets will be deployed
         target_branch: 'main'
         # Build directory to deploy
