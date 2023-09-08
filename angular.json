@@ -41,6 +41,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/home-alone",
               "budgets": [
                 {
                   "type": "initial",
