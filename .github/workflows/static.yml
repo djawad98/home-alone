@@ -19,22 +19,13 @@ jobs:
         node-version: 16.14
 
     - name: Install dependencies
-      run: npm install
+      run: npm install -f
 
     - name: Build Angular app
       run: npm run build
-    - name: Simple Github Pages Deployment
-      # You may pin to the exact commit or the version.
-      # uses: Daniele-Tentoni/simple-github-pages-deployment@a3bf07e83b4967a1c61852a7092ffcecb106e305
-      uses: Daniele-Tentoni/simple-github-pages-deployment@v1.0.1
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        # Your Username or Organization name
-        username: 'djawad98'
-        # Your reponame
-        reponame: 'home-alone'
-        # Your Github token
-        token: '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'
-        # Your git commit email
-        gitemail: 'ghasedjavad@gmail.com'
-        # Move to this directory before deploy
-        directory: 'dist'
+        deploy_key: ${{ secrets.MY_TOKEN }}
+        publish_dir: ./dist/home-alon
