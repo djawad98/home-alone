@@ -33,7 +33,7 @@ jobs:
         # Your reponame
         reponame: 'home-alone'
         # Your Github token
-        token: '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'
+        token: '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'
         # Your git commit email
         gitemail: 'ghasedjavad@gmail.com'
         # Move to this directory before deploy
