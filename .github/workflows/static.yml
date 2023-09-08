@@ -23,18 +23,18 @@ jobs:
 
     - name: Build Angular app
       run: npm run build
-    - name: Simple GitHub Pages Deploy Action
+    - name: Simple Github Pages Deployment
       # You may pin to the exact commit or the version.
-      # uses: rdarida/simple-github-pages-deploy-action@290913edc3f3978a087e0687a67a1cda044965c5
-      uses: rdarida/simple-github-pages-deploy-action@v1
+      # uses: Daniele-Tentoni/simple-github-pages-deployment@a3bf07e83b4967a1c61852a7092ffcecb106e305
+      uses: Daniele-Tentoni/simple-github-pages-deployment@v1.0.1
       with:
-        # Set git config user.name
-        git-user: 'djawad98'
-        # Set git config user.email
-        git-email: 'ghasedjavad@gmail.com'
-        # Set the base folder for deploy
-        # git-base-folder: # optional, default is dist
-        # Set the commit message
-        # commit-message: # optional, default is Simple GitHub Pages Deploy Action
-        # Set the target branch for deployment
-        # branch: # optional, default is gh-pages
+        # Your Username or Organization name
+        username: 'djawad98'
+        # Your reponame
+        reponame: 'home-alone'
+        # Your Github token
+        token: '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'
+        # Your git commit email
+        gitemail: 'ghasedjavad@gmail.com'
+        # Move to this directory before deploy
+        directory: 'dist'
