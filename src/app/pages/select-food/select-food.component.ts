@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AppService } from 'src/app/core/services/app.service';
+import { AppService } from '@app/core/services/app.service';
 
 @Component({
   selector: 'app-select-food',

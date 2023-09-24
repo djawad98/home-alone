@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Gender } from "../models/gender";
 import { BehaviorSubject, Observable, combineLatestWith, map, of, take, tap } from "rxjs";
 import { IngredientCategory } from "../models/ingredient-categories";
@@ -6,12 +6,14 @@ import { Ingredient } from "../models/ingredient";
 import { Food } from "../models/food";
 import { foods } from "../mock-data";
 import { SuggestedFood } from "../models/suggested-food";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
+  private http = inject(HttpClient)
   private _gender$ = new BehaviorSubject<Gender | null>(null);
   gender$ = this._gender$.asObservable();
 
@@ -258,5 +260,9 @@ export class AppService {
         this._suggesetedFoods$.next(suggestedFoods)
       })
     ).subscribe()
+ }
+
+ getTodos(){
+  return this.http.get("https://jsonplaceholder.typicode.com/todos")
  }
 }

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectGenderComponent } from './select-gender.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('SelectGenderComponent', () => {
   let component: SelectGenderComponent;
@@ -8,7 +9,8 @@ describe('SelectGenderComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SelectGenderComponent]
+      declarations: [SelectGenderComponent],
+      imports: [HttpClientModule]
     });
     fixture = TestBed.createComponent(SelectGenderComponent);
     component = fixture.componentInstance;

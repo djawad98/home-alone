@@ -13,6 +13,7 @@ import { SelectFoodComponent } from './pages/select-food/select-food.component';
 import { RecipeComponent } from './pages/recipe/recipe.component'
 import { GenderPipe } from './core/pipes/gender.pipe';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { HttpClientModule } from '@angular/common/http';
 
 const AntDesign = [
   NzButtonModule,
@@ -34,6 +35,7 @@ const AntDesign = [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    HttpClientModule,
     ...AntDesign,
   ],
   providers: [],
