@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { Gender } from "../models/gender";
-import { BehaviorSubject, Observable, combineLatestWith, map, of, take, tap } from "rxjs";
+import { BehaviorSubject, combineLatestWith, map, of, take, tap } from "rxjs";
 import { IngredientCategory } from "../models/ingredient-categories";
 import { Ingredient } from "../models/ingredient";
 import { Food } from "../models/food";
@@ -18,29 +18,14 @@ export class AppService {
   gender$ = this._gender$.asObservable();
 
   private _ingredCategories$ = new BehaviorSubject<IngredientCategory[]>([]);
-  get ingredCategories$() {
-    if (!this._ingredCategories$.getValue().length) {
-      this.actionSetIngredCategories()
-    }
-    return this._ingredCategories$.asObservable();
-  }
+  ingredCategories$ = this._ingredCategories$.asObservable();
 
 
   private _ingreds$ = new BehaviorSubject<Ingredient[]>([]);
-  get ingreds$() {
-    if (!this._ingreds$.getValue().length) {
-      this.actionSetIngreds();
-    }
-    return this._ingreds$.asObservable()
-  }
+  ingreds$ = this._ingreds$.asObservable()
 
   private _foods$ = new BehaviorSubject<Food[]>([])
-  get foods$() {
-    if (!this._foods$.getValue().length) {
-      this.actionSetFoods();
-    }
-    return this._foods$.asObservable()
-  }
+  foods$ = this._foods$.asObservable()
 
   get foodsMap$() {
     return this.foods$.pipe(
@@ -50,8 +35,8 @@ export class AppService {
     )
   }
 
-  private _suggesetedFoods$ = new BehaviorSubject<SuggestedFood[]>([])
-  suggestedFoods$ = this._suggesetedFoods$.asObservable();
+  private _suggestedFoods$ = new BehaviorSubject<SuggestedFood[]>([])
+  suggestedFoods$ = this._suggestedFoods$.asObservable();
 
   get selectedIngredCategory$() {
     return this.ingredCategories$.pipe(map((cats => {
@@ -90,7 +75,7 @@ export class AppService {
   }
 
 
-  private actionUpdateSelectedCountInCategory() {
+  updateSelectedCountInCategory() {
     this.selectedIngreds$.pipe(
       combineLatestWith(this.ingredCategories$),
       take(1),
@@ -107,7 +92,7 @@ export class AppService {
 
 
 
-  private actionSetIngreds() {
+  loadIngredients() {
     this._ingreds$.next([
       {
         id: 0,
@@ -161,7 +146,7 @@ export class AppService {
   }
 
 
-  private actionSetIngredCategories() {
+  loadIngredCategories() {
     this._ingredCategories$.next([
       {
         label: 'سبزیجات',
@@ -190,16 +175,16 @@ export class AppService {
     ]);
   }
 
-  private actionSetFoods() {
+  loadFoods() {
     this._foods$.next(foods);
   }
 
-  actionSetGender(gender: Gender) {
+  setGender(gender: Gender) {
     this._gender$.next(gender)
   }
 
 
-  actionSelectIngred(selectedIngred: Ingredient) {
+  selectIngred(selectedIngred: Ingredient) {
     this.ingreds$.pipe(
       take(1),
       tap(ingreds => {
@@ -210,12 +195,12 @@ export class AppService {
           return ingred
         }))
 
-        this.actionUpdateSelectedCountInCategory()
+        this.updateSelectedCountInCategory()
       })
     ).subscribe()
   }
 
-  actionSelectCategory(selectedCategory: IngredientCategory) {
+  selectCategory(selectedCategory: IngredientCategory) {
     this.ingredCategories$.pipe(
       take(1),
       tap(cats => {
@@ -234,8 +219,7 @@ export class AppService {
 
 
 
-  actionGetRecipes() {
-
+  loadRecipes() {
     this.selectedIngreds$.pipe(
       combineLatestWith(this.foods$),
       take(1),
@@ -257,7 +241,7 @@ export class AppService {
         })
         suggestedFoods.sort((a,b) => b.resemblance - a.resemblance)
 
-        this._suggesetedFoods$.next(suggestedFoods)
+        this._suggestedFoods$.next(suggestedFoods)
       })
     ).subscribe()
  }

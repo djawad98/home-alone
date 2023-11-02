@@ -1,5 +1,4 @@
 import { Effort } from "./effort";
-import { Ingredient } from "./ingredient";
 
 export interface Food {
     id: number;

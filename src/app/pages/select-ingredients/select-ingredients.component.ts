@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Ingredient } from 'src/app/core/models/ingredient';
-import { IngredientCategory } from 'src/app/core/models/ingredient-categories';
-import { AppService } from 'src/app/core/services/app.service';
+import { Ingredient } from '../../core/models/ingredient';
+import { IngredientCategory } from '../../core/models/ingredient-categories';
+import { AppService } from '../../core/services/app.service';
 
 @Component({
   selector: 'app-select-ingredients',
@@ -21,19 +21,21 @@ export class SelectIngredientsComponent {
   selectedIngredients$ = this._appService.selectedIngreds$;
 
   constructor(){
-    this.currentCategory$.subscribe(console.log)
+    this._appService.loadIngredCategories()
+    this._appService.loadIngredients()
   }
 
   selectCategory(category: IngredientCategory){
-    this._appService.actionSelectCategory(category)
+    this._appService.selectCategory(category)
   }
 
   selectIngredient(ingred: Ingredient){
-    this._appService.actionSelectIngred(ingred)
+    this._appService.selectIngred(ingred)
   }
 
   getRecipes(){
     this._router.navigate(['recipes'])
-    this._appService.actionGetRecipes();
+    this._appService.loadFoods();
+    this._appService.loadRecipes();
   }
 }

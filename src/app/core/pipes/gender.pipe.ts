@@ -10,13 +10,10 @@ export class GenderPipe implements PipeTransform {
         switch (gender){
             case Gender.Male:
                 return 'حاجی'
-                break;
             case Gender.Female:
                 return 'آبجی'
-                break;
             default:
                 return ''
-                break;
         }
     }
 }
